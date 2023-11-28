@@ -7,13 +7,58 @@
 	},
 	"item": [
 		{
-			"name": "New Request",
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required field 'token'\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.token).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.token).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.token).to.be.a('string');",
+							"    pm.expect(responseData.token).to.match(/[A-Za-z0-9-_]+/);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\":\"jack\",\n    \"password\":\"kali\"\n}"
+					"raw": "{\n    \"username\":\"rooto\",\n    \"password\":\"rooto\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8081/api/register",
@@ -25,6 +70,916 @@
 					"path": [
 						"api",
 						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register-double",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 409\", function () {",
+							"    pm.expect(pm.response.code).to.equal(409);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response message indicates that the username already exists\", function () {",
+							"    const responseData = pm.response.text();",
+							"    ",
+							"    pm.expect(responseData).to.be.a('string');",
+							"    pm.expect(responseData).to.contain(\"Username already exists\");",
+							"});",
+							"",
+							"",
+							"",
+							"pm.test(\"Response time is less than 300ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(300);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"rooto\",\n    \"password\":\"rooto\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register-short_username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 400\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response contains error message for invalid username length\", function () {",
+							"    const responseData = pm.response.text();",
+							"",
+							"    pm.expect(responseData).to.be.an('string');",
+							"    pm.expect(responseData).to.exist.and.to.contain(\"Username must be at least 4 symbols long\");",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"r1\",\n    \"password\":\"222222\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Empty password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 400\", function () {",
+							"    pm.expect(pm.response.code).to.equal(400);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response message includes 'Password must be at least 4 symbols long.'\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Password must be at least 4 symbols long.\");",
+							"});",
+							"",
+							"",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"rooto\",\n    \"password\":\"\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"    let response = pm.response.json();",
+							"    postman.setEnvironmentVariable('token', response.token);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required field 'token'\", function () {",
+							"    const responseData = pm.response.json();",
+							"    pm.expect(responseData.token).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.token).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Token should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Token is in a valid format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.token).to.be.a('string').and.to.match(/[A-Za-z0-9-_]+/, \"Token should be in a valid format\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 500ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"rooto\",\n    \"password\":\"rooto\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login_Wrong",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 401\", function () {",
+							"    pm.expect(pm.response.code).to.equal(401);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response message indicates invalid username or password\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Invalid username or password\");",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"rooto\",\n    \"password\":\"rooto2\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check_forum_empty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"",
+							"pm.test(\"Response body is null\", function () {",
+							"    pm.expect(pm.response.json()).to.be.null;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response is in the expected format\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.a('null');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/api/forums",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"forums"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDEyNzI5MTksImlkIjozLCJ1c2VybmFtZSI6InJvb3RvIn0.T5IquFXjlsW22Ya8PjQkdcNeWkPoe0JkBJv8V-v2VgQ",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create_forum1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of the response array\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item).to.be.an('object');",
+							"        pm.expect(item).to.have.property('id');",
+							"        pm.expect(item).to.have.property('name');",
+							"        pm.expect(item).to.have.property('creatorId');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.id).to.be.a('number');",
+							"        pm.expect(item.id).to.be.at.least(0);",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Ensure name is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"CreatorId is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.creatorId).to.be.a('number').and.to.be.at.least(0);",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Formum1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/forums",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"forums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create_forum2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the structure of the response array\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item).to.be.an('object');",
+							"        pm.expect(item).to.have.property('id');",
+							"        pm.expect(item).to.have.property('name');",
+							"        pm.expect(item).to.have.property('creatorId');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.id).to.be.a('number');",
+							"        pm.expect(item.id).to.be.at.least(0);",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Ensure name is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"CreatorId is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.creatorId).to.be.a('number').and.to.be.at.least(0);",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Formum2\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/forums",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"forums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete_forum2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response body structure is as expected\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+							"    responseData.forEach(function(forum) {",
+							"        pm.expect(forum).to.be.an('object');",
+							"        pm.expect(forum.id).to.be.a('number');",
+							"        pm.expect(forum.name).to.be.a('string');",
+							"        pm.expect(forum.creatorId).to.be.a('number');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id and name fields are present and non-empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    ",
+							"    responseData.forEach(function(forum) {",
+							"        pm.expect(forum.id).to.exist.and.to.be.a('number');",
+							"        pm.expect(forum.name).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"CreatorId is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(forum) {",
+							"        pm.expect(forum.creatorId).to.be.a('number').and.to.satisfy((id) => id >= 0, \"CreatorId should be a non-negative integer\");",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response contains an array with at least one element\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/forums?forumId=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"forums"
+					],
+					"query": [
+						{
+							"key": "forumId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete_forum2_not_found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 404\", function () {",
+							"    pm.expect(pm.response.code).to.equal(404);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response message is 'Forum not found'\", function () {",
+							"    const responseData = pm.response.text();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('string');",
+							"    pm.expect(responseData).to.have.contain('Forum not found');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response time is less than 300ms\", function () {",
+							"  pm.expect(pm.response.responseTime).to.be.below(300);",
+							"});",
+							"",
+							"",
+							"pm.test(\"ForumId parameter is included in the request URL\", function () {",
+							"    pm.expect(pm.request.url.query.has(\"forumId\")).to.be.true;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/forums?forumId=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"forums"
+					],
+					"query": [
+						{
+							"key": "forumId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_forums",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate the array of forums\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(forum) {",
+							"        pm.expect(forum).to.be.an('object');",
+							"        pm.expect(forum.id).to.be.a('number');",
+							"        pm.expect(forum.name).to.be.a('string');",
+							"        pm.expect(forum.creatorId).to.be.a('number');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id field is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    responseData.forEach(function(forum) {",
+							"        pm.expect(forum.id).to.be.a('number').and.to.be.at.least(0, \"Id should be a non-negative integer\");",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Name field must be a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    responseData.forEach(function(forum) {",
+							"        pm.expect(forum.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"CreatorId field is a non-negative integer\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    responseData.forEach(function(forum) {",
+							"        pm.expect(forum.creatorId).to.be.a('number').and.to.be.at.least(0);",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/api/forums",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"forums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send_message",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Validate the structure of the response array and its properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item).to.be.an('object');",
+							"        pm.expect(item).to.have.property('id').that.is.a('number').and.is.at.least(0);",
+							"        pm.expect(item).to.have.property('username').that.is.a('string').and.is.not.empty;",
+							"        pm.expect(item).to.have.property('message').that.is.a('string');",
+							"        pm.expect(item).to.have.property('forumId').that.is.a('number');",
+							"        pm.expect(item).to.have.property('timestamp').that.is.a('string');",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"ForumId\": 1,\n    \"message\":\"Hello!!\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/messages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"messages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get_messages",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"pm.test(\"Validate the structure of the response array and its properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item).to.be.an('object');",
+							"        pm.expect(item).to.have.property('id').that.is.a('number').and.is.at.least(0);",
+							"        pm.expect(item).to.have.property('username').that.is.a('string').and.is.not.empty;",
+							"        pm.expect(item).to.have.property('message').that.is.a('string');",
+							"        pm.expect(item).to.have.property('forumId').that.is.a('number');",
+							"        pm.expect(item).to.have.property('timestamp').that.is.a('string');",
+							"    });",
+							"});pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Validate the structure of the response array and its properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('array');",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item).to.be.an('object');",
+							"        pm.expect(item).to.have.property('id').that.is.a('number').and.is.at.least(0);",
+							"        pm.expect(item).to.have.property('username').that.is.a('string').and.is.not.empty;",
+							"        pm.expect(item).to.have.property('message').that.is.a('string');",
+							"        pm.expect(item).to.have.property('forumId').that.is.a('number');",
+							"        pm.expect(item).to.have.property('timestamp').that.is.a('string');",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"Each message has a non-empty username\", function () {",
+							"    const responseData = pm.response.json();",
+							"    responseData.forEach(function(item) {",
+							"        pm.expect(item.username).to.be.a('string').and.to.not.be.empty;",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/messages?forumId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"messages"
+					],
+					"query": [
+						{
+							"key": "forumId",
+							"value": "1"
+						}
 					]
 				}
 			},
