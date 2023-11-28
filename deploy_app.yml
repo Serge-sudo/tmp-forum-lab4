@@ -1,0 +1,10 @@
+---
+- hosts: local
+  become: yes
+  tasks:
+    - name: Copy the web application files
+      synchronize:
+        src: /path/to/local/web-app-folder
+        dest: /var/www/html/web-app-folder
+
+
