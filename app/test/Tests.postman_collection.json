@@ -12,19 +12,8 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "username",
-							"value": "jack",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "jack2",
-							"type": "text"
-						}
-					]
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"jack\",\n    \"password\":\"kali\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8081/api/register",
