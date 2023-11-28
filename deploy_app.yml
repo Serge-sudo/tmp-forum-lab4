@@ -1,11 +1,14 @@
 ---
 - hosts: 127.0.0.1
-  connection: local
-  become: yes
   tasks:
-    - name: Copy the web application files
+    - name: Copy the application files
       synchronize:
-        src: /path/to/local/web-app-folder
-        dest: /var/www/html/web-app-folder
+        src: app/main
+        dest: ~/
+    - name: Run
+      shell: ~/main
+      async: 2592000               # 60*60*24*30 – 1 month
+      poll: 0
+     
 
 
